@@ -1,0 +1,71 @@
+# The address which the proxy can be reached at.
+listenaddr: "localhost:8000"
+
+# The root path of static content to serve upon receiving a request the proxy
+# cannot handle.
+staticroot: "./static"
+
+# The log level that should be used for the proxy.
+#
+# Valid options include: trace, debug, info, warn, error, critical, off.
+debuglevel: "debug"
+
+# Whether the proxy should create a valid certificate through Let's Encrypt for
+# the fully qualifying domain name.
+autocert: false
+servername: localhost
+
+# Settings for the lnd node used to generate payment requests. All of these
+# options are required.
+authenticator:
+  # The host:port which lnd's RPC can be reached at.
+  lndhost: "localhost:10009"
+
+  # The path to lnd's TLS certificate.
+  tlspath: "/Users/ellemouton/.lnd/tls.cert"
+
+  # The path to lnd's macaroon directory.
+  macdir: "/Users/ellemouton/.lnd/data/chain/bitcoin/testnet"
+
+  # The chain network the lnd is active on.
+  network: "testnet"
+
+# Settings for the etcd instance which the proxy will use to reliably store and
+# retrieve token information.
+etcd:
+  # The client host:port which the etcd instance can be reached at.
+  host: "localhost:2379"
+
+# List of services that should be reachable behind the proxy.  Requests will be
+# matched to the services in order, picking the first that satisfies hostregexp
+# avoid YAML parsing errors!
+services:
+  - name: "stuff"
+    hostregexp: '^localhost:8000$'
+    pathregexp: '^/book.*'
+    address: "127.0.0.1:9000"
+    protocol: http
+    capabilities: "add,subtract"
+    auth: "on"
+    dynamicprices: true
+    dynamicpriceendpoint: "127.0.0.1:9001"
+
+# Settings for a Tor instance to allow requests over Tor as onion services.
+# Configuring Tor is optional.
+tor:
+  # The host:port which Tor's control can be reached at.
+  # control: "localhost:9051"
+
+  # The internal port we should listen on for client requests over Tor. Note
+  # that this port should not be exposed to the outside world, it is only
+  # intended to be reached by clients through the onion service.
+  # listenport: 8082
+
+  # The port through which the onion services to be created can be reached at.
+  # virtualport: 8082
+
+  # Whether a v2 onion service should be created to handle requests.
+  v2: false
+
+  # Whether a v3 onion service should be created to handle requests.
+  v3: false
