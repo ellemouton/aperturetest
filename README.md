@@ -29,8 +29,10 @@ the given resource.
 
 ## Test it out:
 
-- see `aperture.yml` for how the service should be defined. 
-- then just `go run main.go`
+- build `aperture` using https://github.com/ellemouton/aperture/pull/1
+- see `aperture.yml` for how the service should be defined.
+- run lnd, etcd and aperture
+- then run this server: `go run main.go`
 - hit the various endpoints (and pay the invoice to see it work):   
         - `localhost:800/book/1` should cost 10 sats
         - `localhost:800/book/2` should cost 20 sats
