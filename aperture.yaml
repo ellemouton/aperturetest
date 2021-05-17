@@ -47,8 +47,11 @@ services:
     protocol: http
     capabilities: "add,subtract"
     auth: "on"
-    dynamicprices: true
-    dynamicpriceendpoint: "127.0.0.1:9001"
+    dynamicprice:
+      enabled: true
+      grpcaddress: "127.0.0.1:9001"
+      insecure: false
+      tlscertpath: "/Users/ellemouton/scratch/aperturetest/tls.cert"
 
 # Settings for a Tor instance to allow requests over Tor as onion services.
 # Configuring Tor is optional.

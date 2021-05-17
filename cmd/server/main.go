@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net"
@@ -11,7 +12,13 @@ import (
 
 	pb "aperturetest/pricesrpc"
 
+	"github.com/lightningnetwork/lnd/cert"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+)
+
+var (
+	secure = flag.Bool("tls", false, "use tls")
 )
 
 var bookPrices = map[int]int64{
@@ -21,6 +28,8 @@ var bookPrices = map[int]int64{
 }
 
 func main() {
+	flag.Parse()
+
 	http.HandleFunc("/book/1", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "here is your book")
 	})
@@ -47,7 +56,22 @@ func serverGRPCForever(addr string) {
 	}
 
 	pricesServer := Server{}
-	grpcServer := grpc.NewServer()
+	var grpcServer *grpc.Server
+	if *secure {
+		log.Printf("init secure gRPC server")
+		certData, _, err := cert.LoadCert("./tls.cert", "./tls.key")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tlsCfg := cert.TLSConfFromCert(certData)
+		tlsCredentials := credentials.NewTLS(tlsCfg)
+		grpcServer = grpc.NewServer(grpc.Creds(tlsCredentials))
+
+	} else {
+		log.Printf("init insecure gRPC server")
+		grpcServer = grpc.NewServer()
+	}
 
 	pb.RegisterPricesServer(grpcServer, pricesServer)
 

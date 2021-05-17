@@ -5,7 +5,7 @@ package pricesrpc;
 option go_package = "./pricesrpc";
 
 service Prices {
-        rpc GetPrice(GetPriceRequest) returns (GetPriceResponse) {}
+        rpc GetPrice(GetPriceRequest) returns (GetPriceResponse);
 }
 
 message GetPriceRequest {
