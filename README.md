@@ -11,20 +11,21 @@ So in the  `aperture.yml` file, you will have something like this:
 # With no tls:
 ...
 services:
-       ...
-       usepricerserver: true
-       pricerconfig:
-            insecure:    true
-            grpcaddress: "127.0.0.1:9001"
+        ...
+        dynamicprice:
+                enabled: true
+                grpcaddress: "127.0.0.1:9001"
+                insecure: true
 
 # With tls:
 ...
 services:
        ...
-       usepricerserver: true
-       pricerconfig:
-            grpcaddress: "127.0.0.1:9001"
-            tlscertpath: "/path/to/cert/tls.cert" 
+        dynamicprice:
+                enabled: true
+                grpcaddress: "127.0.0.1:9001"
+                insecure: false
+                tlscertpath: "/Users/ellemouton/scratch/aperturetest/tls.cert"
 ```
 
 This allows the backend service to have different prices for the various
@@ -41,7 +42,7 @@ the given resource.
 
 ## Test it out:
 
-- build `aperture` using https://github.com/ellemouton/aperture/pull/1
+- build `aperture` using https://github.com/lightninglabs/aperture/pull/53
 - see `aperture.yml` for how the service should be defined.
 - run lnd, etcd and aperture
 - then run this server: `go run cmd/server/main.go`
